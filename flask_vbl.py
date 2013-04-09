@@ -8,16 +8,6 @@ from urllib import urlencode
 from functools import wraps
 from pprint import pformat
 
-import time
-def print_timing(func):
-    def wrapper(*arg):
-        t1 = time.time()
-        res = func(*arg)
-        t2 = time.time()
-        print '%s took %0.3f ms' % (func.func_name, (t2-t1)*1000.0)
-        return res
-    return wrapper
-
 class VBL(object):
     cookie_key = 'vbl_PHPSESSID'
     url_base = 'vbl.synchrotron.org.au'
@@ -37,7 +27,6 @@ class VBL(object):
         
         app.before_request(self._load_user)
     
-    @print_timing
     def _load_user(self):
         ctx = _request_ctx_stack.top
         if self.session_key in session:
@@ -46,7 +35,6 @@ class VBL(object):
             ctx.user = self._get_session()
         else:
             ctx.user = None
-        print pformat(ctx.user)
         
     def _get_vbl_url(self, path, params=''):
         return urlunparse((request.scheme, self.url_base, path, '', params, ''))    
@@ -56,7 +44,6 @@ class VBL(object):
         url = self._get_vbl_url('index.php', params)
         return redirect(url)
  
-    @print_timing
     def _get_session(self):
         r = requests.get(self._get_vbl_url(self.epn_list),
                          cookies={self.cookie_key:request.cookies.get(self.cookie_key)})
