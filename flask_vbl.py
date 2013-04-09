@@ -8,6 +8,9 @@ from urllib import urlencode
 from functools import wraps
 from pprint import pformat
 
+def _user_context_processor():
+    return dict(current_user=_request_ctx_stack.top.user)
+
 class VBL(object):
     cookie_key = 'vbl_PHPSESSID'
     url_base = 'vbl.synchrotron.org.au'
@@ -26,6 +29,7 @@ class VBL(object):
         app.vbl = self
         
         app.before_request(self._load_user)
+        app.context_processor(_user_context_processor)
     
     def _load_user(self):
         ctx = _request_ctx_stack.top
