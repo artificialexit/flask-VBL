@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name='Flask-VBL',
-    version='0.1.0',
+    version='0.1.1',
     url='https://github.com/artificialexit/flask-VBL',
     license='Modified BSD',
     author='Nathan Mudie',
@@ -21,7 +21,8 @@ setup(
     include_package_data=True,
     platforms='any',
     install_requires=[
-        'Flask'
+        'Flask',
+        'requests'
     ],
     classifiers=[
         'Environment :: Web Environment',
